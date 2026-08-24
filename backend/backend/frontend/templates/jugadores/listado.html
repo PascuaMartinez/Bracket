@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Jugadores · Bracket{% endblock %}
+
+{% block content %}
+<div class="fila-titulo">
+  <div>
+    <h1 class="titulo-pagina">Jugadores</h1>
+    <p class="subtitulo">{{ jugadores | length }} registrado{{ 's' if jugadores | length != 1 }}.</p>
+  </div>
+  {% if hay_sesion() %}<a class="boton" href="{{ url_for('jugador.nuevo') }}">Nuevo jugador</a>{% endif %}
+</div>
+
+{% if jugadores %}
+<div class="grilla">
+  {% for jugador in jugadores %}
+  <a class="panel panel-enlace" href="{{ url_for('jugador.detalle', jugador_id=jugador.id) }}">
+    <div class="tarjeta-con-icono">
+      {% if jugador.imagen_icono %}
+      <img class="icono" src="{{ jugador.imagen_icono | url_imagen }}" alt="">
+      {% else %}
+      {# Sin imagen, la inicial: mantiene la alineación de la lista en vez
+         de dejar un hueco. #}
+      <span class="icono icono-inicial">{{ jugador.nombre[0] | upper }}</span>
+      {% endif %}
+      <p class="titulo-seccion">{{ jugador.nombre }}</p>
+    </div>
+  </a>
+  {% endfor %}
+</div>
+{% else %}
+<div class="vacio">
+  <p>Todavía no hay jugadores cargados.</p>
+  <p><a href="{{ url_for('jugador.nuevo') }}">Agregar el primero</a></p>
+</div>
+{% endif %}
+{% endblock %}
